@@ -1,34 +1,33 @@
 import React, { useState } from 'react'
-
-//Esta pagina renderizará cada bebida de manera individual
+import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect } from 'react'
 
 const Beer = () => {
     const [beer, setBeer] = useState([])
+    const params = useParams();
+    const beerId = params.id;
 
-    /** 
+    const navigate = useNavigate();
+    
     const getBeer = async()=>{
-        //Deberas completar este fetch con el parametro correspondiente
-        const res = await fetch(`https://api.punkapi.com/v2/beers/${}`)
-        const data = await res.json()
-        setBeer(data[0])
+        const res = await fetch(`https://api.openbrewerydb.org/v1/breweries/${beerId}`);
+        const data = await res.json();
+        setBeer(data);
     }
 
     useEffect(()=>{
-        getBeer()
-    })
-    */
-  
+        getBeer();
+    }, [])
   
   return (
     <div>
-        <h2>Cerveza numero...</h2>
+        <h2>Cerveza {beer.name}</h2>
         <div className='card'>
-            <img src={beer.image_url} alt="beer-detail" />
-            <p>{beer.tagline}</p>
-            <p>{beer.description}</p>
-            <p>{beer.brewers_tips} </p>
+            <p>{beer.brewery_type}</p>
+            <p>{beer.city}</p>
+            <p>{beer.country}</p>
         </div>
-        <button>Go back</button>
+        <button onClick={() => navigate(-1)}>Go back</button>
     </div>
 
   )
